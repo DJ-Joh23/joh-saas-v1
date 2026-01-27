@@ -23,6 +23,9 @@ export async function createCheckoutSession(
       },
     ],
     mode: "subscription",
+    subscription_data: {
+      trial_period_days: 7,
+    },
     success_url: `${process.env.VITE_FRONTEND_URL || "http://localhost:3000"}/dashboard?session_id={CHECKOUT_SESSION_ID}`,
     cancel_url: `${process.env.VITE_FRONTEND_URL || "http://localhost:3000"}/dashboard`,
     metadata: {

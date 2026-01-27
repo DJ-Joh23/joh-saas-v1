@@ -50,3 +50,9 @@
 ## Phase 9: GitHub Push
 - [ ] GitHubへのコードプッシュ
 - [ ] 最終確認と動作検証
+
+## Phase 10: Stripe Trial Period & Vercel Fix
+- [ ] Stripe Checkout Sessionに7日間の無料トライアルを追加
+- [ ] Vercelエラーの確認と修正
+- [ ] 開発サーバーの再起動
+- [ ] 最終確認と動作検証
