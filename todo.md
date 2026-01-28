@@ -69,9 +69,9 @@
 - [ ] 本番環境での動作確認
 
 ## Phase 13: Frontend Build Fix for Vercel
-- [ ] プロジェクト構造の確認（client/server分離）
-- [ ] vercel.jsonの作成/修正
-- [ ] ビルドコマンドの確認
-- [ ] ローカルビルドテスト
-- [ ] GitHubへプッシュ
+- [x] プロジェクト構造の確認（client/server分離）
+- [x] vercel.jsonの作成/修正
+- [x] ビルドコマンドの確認
+- [x] ローカルビルドテスト
+- [x] GitHubへプッシュ
 - [ ] Vercelで再デプロイ
