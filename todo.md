@@ -52,7 +52,12 @@
 - [ ] 最終確認と動作検証
 
 ## Phase 10: Stripe Trial Period & Vercel Fix
-- [ ] Stripe Checkout Sessionに7日間の無料トライアルを追加
-- [ ] Vercelエラーの確認と修正
-- [ ] 開発サーバーの再起動
-- [ ] 最終確認と動作検証
+- [x] Stripe Checkout Sessionに7日間の無料トライアルを追加
+- [x] 開発サーバーの再起動
+- [x] Gitコミット（trial_period_days設定）
+- [x] チェックポイント保存
+
+## Phase 11: GitHub Push with New Token
+- [x] 新しいGitHubトークンを使用してリモートリポジトリを設定
+- [x] コードをGitHubにプッシュ
+- [x] GitHubリポジトリの確認
