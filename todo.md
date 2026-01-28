@@ -61,3 +61,17 @@
 - [x] 新しいGitHubトークンを使用してリモートリポジトリを設定
 - [x] コードをGitHubにプッシュ
 - [x] GitHubリポジトリの確認
+
+## Phase 12: Vercel Final Deployment
+- [ ] Vercel環境変数設定の確認
+- [ ] Vercelで再ビルド（Redeploy）実行
+- [ ] デプロイ完了確認
+- [ ] 本番環境での動作確認
+
+## Phase 13: Frontend Build Fix for Vercel
+- [ ] プロジェクト構造の確認（client/server分離）
+- [ ] vercel.jsonの作成/修正
+- [ ] ビルドコマンドの確認
+- [ ] ローカルビルドテスト
+- [ ] GitHubへプッシュ
+- [ ] Vercelで再デプロイ
