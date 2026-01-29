@@ -114,23 +114,18 @@ export default function Dashboard() {
             </div>
 
             {!isPro && (
-              <Button
-                onClick={() => createCheckout.mutate()}
-                disabled={createCheckout.isPending}
-                className="w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-semibold py-3 rounded-lg"
+              <a
+                href="https://buy.stripe.com/test_4gM6oH6aI00a8h13G04Ni0e"
+                target="_blank"
+                rel="noopener noreferrer"
               >
-                {createCheckout.isPending ? (
-                  <>
-                    <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                    Processing...
-                  </>
-                ) : (
-                  <>
-                    <Crown className="w-4 h-4 mr-2" />
-                    Upgrade to Pro
-                  </>
-                )}
-              </Button>
+                <Button
+                  className="w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-semibold py-3 rounded-lg"
+                >
+                  <Crown className="w-4 h-4 mr-2" />
+                  Upgrade to Pro
+                </Button>
+              </a>
             )}
           </CardContent>
         </Card>
