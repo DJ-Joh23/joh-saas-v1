@@ -30,6 +30,9 @@ export default function Home() {
           <p className="text-xl text-slate-300 mb-12 max-w-2xl mx-auto leading-relaxed">
             店舗せどりの必需品。AIが商品画像を解析し、フリマ相場と利益幅をAR表示。
           </p>
+          <p className="text-sm text-slate-400 mb-8">
+            実例：スキャン一瞬で ¥1,280 の利益判定。相場リサーチの時間をゼロに。
+          </p>
           <a
             href={stripeCheckoutUrl}
             className="inline-block"
@@ -38,7 +41,7 @@ export default function Home() {
               size="lg"
               className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-6 text-lg font-semibold rounded-lg transition transform hover:scale-105"
             >
-              今すぐ490円で導入する
+              7日間の無料トライアルを開始する
               <ArrowRight className="ml-2 w-5 h-5" />
             </Button>
           </a>
@@ -49,8 +52,17 @@ export default function Home() {
       <section className="py-20 px-4 bg-gradient-to-b from-transparent to-slate-900/50">
         <div className="max-w-6xl mx-auto">
           <div className="grid md:grid-cols-2 gap-12 items-center">
-            {/* Left: Phone Mockup */}
+            {/* Left: Product Image */}
             <div className="flex justify-center">
+              <img
+                src="/app-demo.png"
+                alt="PriceFlow デモ画面"
+                className="w-80 h-auto rounded-3xl shadow-2xl"
+              />
+            </div>
+
+            {/* Removed Phone Mockup - kept for reference */}
+            <div className="hidden">
               <div className="relative w-80 h-96 bg-gradient-to-br from-slate-800 to-slate-900 rounded-3xl border-8 border-slate-700 shadow-2xl overflow-hidden">
                 {/* Phone Status Bar */}
                 <div className="bg-slate-950 px-6 py-2 flex justify-between items-center text-white text-xs">
@@ -144,8 +156,8 @@ export default function Home() {
           
           <div className="bg-gradient-to-br from-slate-800 to-slate-900 border border-slate-700 rounded-2xl p-8 mb-8">
             <h3 className="text-2xl font-bold text-white mb-4">PriceFlow Pro</h3>
-            <div className="text-5xl font-bold text-blue-400 mb-2">¥490</div>
-            <p className="text-slate-400 mb-8">1回限りの購入</p>
+            <div className="text-5xl font-bold text-blue-400 mb-2">¥490 <span className="text-2xl text-slate-400">/月</span></div>
+            <p className="text-slate-400 mb-8">初回7日間無料</p>
             <a href={stripeCheckoutUrl}>
               <Button className="w-full bg-blue-600 hover:bg-blue-700 text-white py-6 text-lg font-semibold rounded-lg transition">
                 今すぐ導入する
