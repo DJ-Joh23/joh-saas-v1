@@ -1,10 +1,6 @@
 import Stripe from "stripe";
 
-const stripeSecretKey = process.env.STRIPE_SECRET_KEY;
-
-if (!stripeSecretKey) {
-  throw new Error("STRIPE_SECRET_KEY is not set");
-}
+const stripeSecretKey = process.env.STRIPE_SECRET_KEY || "sk_test_dummy_key_for_development";
 
 export const stripe = new Stripe(stripeSecretKey);
 
@@ -13,27 +9,32 @@ export async function createCheckoutSession(
   userId: number,
   email: string
 ) {
-  const session = await stripe.checkout.sessions.create({
-    customer: customerId,
-    payment_method_types: ["card"],
-    line_items: [
-      {
-        price: process.env.STRIPE_PRICE_ID || "price_1Su3JOHmah1XNqU8ghVpMg9yW2aOoKm4pPgIF1DxPABrkk1jEk39Z232wJVfH7XVsO0ez7cX8rQetmvLi0hx1KKR0007kxBNVI",
-        quantity: 1,
+  try {
+    const session = await stripe.checkout.sessions.create({
+      customer: customerId,
+      payment_method_types: ["card"],
+      line_items: [
+        {
+          price: process.env.STRIPE_PRICE_ID || "price_1Su3JOHmah1XNqU8ghVpMg9yW2aOoKm4pPgIF1DxPABrkk1jEk39Z232wJVfH7XVsO0ez7cX8rQetmvLi0hx1KKR0007kxBNVI",
+          quantity: 1,
+        },
+      ],
+      mode: "subscription",
+      subscription_data: {
+        trial_period_days: 7,
       },
-    ],
-    mode: "subscription",
-    subscription_data: {
-      trial_period_days: 7,
-    },
-    success_url: `${process.env.VITE_FRONTEND_URL || "http://localhost:3000"}/dashboard?session_id={CHECKOUT_SESSION_ID}`,
-    cancel_url: `${process.env.VITE_FRONTEND_URL || "http://localhost:3000"}/dashboard`,
-    metadata: {
-      userId: userId.toString(),
-    },
-  });
+      success_url: `${process.env.VITE_FRONTEND_URL || "http://localhost:3000"}/dashboard?session_id={CHECKOUT_SESSION_ID}`,
+      cancel_url: `${process.env.VITE_FRONTEND_URL || "http://localhost:3000"}/dashboard`,
+      metadata: {
+        userId: userId.toString(),
+      },
+    });
 
-  return session;
+    return session;
+  } catch (error) {
+    console.error("Stripe error:", error);
+    throw error;
+  }
 }
 
 export async function createCustomer(email: string, name?: string) {
