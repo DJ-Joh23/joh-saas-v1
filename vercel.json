@@ -1,8 +1,8 @@
 {
-  "buildCommand": "cd client && npm run build",
-  "outputDirectory": "client/dist",
+  "buildCommand": "pnpm build",
+  "outputDirectory": "dist/public",
   "framework": "vite",
-  "installCommand": "npm install",
+  "installCommand": "pnpm install",
   "env": {
     "VITE_APP_ID": "@VITE_APP_ID",
     "VITE_OAUTH_PORTAL_URL": "@VITE_OAUTH_PORTAL_URL",
