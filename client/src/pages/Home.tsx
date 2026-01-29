@@ -1,191 +1,193 @@
-import { useAuth } from "@/_core/hooks/useAuth";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Check, Zap, Shield, TrendingUp } from "lucide-react";
+import { useAuth } from "@/_core/hooks/useAuth";
 import { getLoginUrl } from "@/const";
-import { Link } from "wouter";
-import { Crown, Zap, Shield, ArrowRight } from "lucide-react";
 
 export default function Home() {
-  const { user, isAuthenticated, logout } = useAuth();
+  const { isAuthenticated } = useAuth();
+
+  const features = [
+    {
+      icon: TrendingUp,
+      title: "市場価格の追跡",
+      description: "リアルタイムで市場価格を監視し、最高の利益機会を発見",
+    },
+    {
+      icon: Zap,
+      title: "高速検索",
+      description: "モデル名やSKUで瞬時に商品を検索・フィルター",
+    },
+    {
+      icon: Shield,
+      title: "安全な管理",
+      description: "あなたのデータは安全に保護されています",
+    },
+  ];
+
+  const stripeCheckoutUrl = "https://buy.stripe.com/test_4gM6oH6aI00a8h13G04Ni0e";
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-900 dark:to-slate-800">
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
       {/* Navigation */}
-      <nav className="border-b border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 sticky top-0 z-50">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
-          <div className="text-2xl font-bold text-slate-900 dark:text-white">
-            SaaS<span className="text-blue-600">Pro</span>
-          </div>
-          <div className="flex items-center gap-4">
+      <nav className="border-b border-slate-700 bg-slate-900/50 backdrop-blur-sm sticky top-0 z-50">
+        <div className="max-w-6xl mx-auto px-4 md:px-8 py-4 flex items-center justify-between">
+          <h1 className="text-2xl font-bold text-white">フリマ価格値付けツール</h1>
+          <div className="flex gap-3">
             {isAuthenticated ? (
-              <>
-                <Link href="/dashboard">
-                  <Button variant="outline">Dashboard</Button>
-                </Link>
-                <Button onClick={logout} variant="ghost">
-                  Logout
-                </Button>
-              </>
-            ) : (
-              <a href={getLoginUrl()}>
-                <Button>Sign In</Button>
+              <a href="/dashboard">
+                <Button className="bg-blue-600 hover:bg-blue-700">ダッシュボード</Button>
               </a>
+            ) : (
+              <>
+                <a href={getLoginUrl()}>
+                  <Button variant="outline">ログイン</Button>
+                </a>
+              </>
             )}
           </div>
         </div>
       </nav>
 
       {/* Hero Section */}
-      <section className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-20 text-center">
-        <h1 className="text-5xl sm:text-6xl font-bold text-slate-900 dark:text-white mb-6">
-          Powerful SaaS Platform
-        </h1>
-        <p className="text-xl text-slate-600 dark:text-slate-400 mb-8 max-w-2xl mx-auto">
-          Start with a free plan and upgrade to Pro for unlimited access. Simple pricing, powerful features.
-        </p>
-        {!isAuthenticated ? (
-          <a href={getLoginUrl()}>
-            <Button size="lg" className="bg-blue-600 hover:bg-blue-700 text-white">
-              Get Started Free <ArrowRight className="ml-2 w-4 h-4" />
-            </Button>
-          </a>
-        ) : (
-          <Link href="/dashboard">
-            <Button size="lg" className="bg-blue-600 hover:bg-blue-700 text-white">
-              Go to Dashboard <ArrowRight className="ml-2 w-4 h-4" />
-            </Button>
-          </Link>
-        )}
+      <section className="max-w-6xl mx-auto px-4 md:px-8 py-20 md:py-32">
+        <div className="space-y-8 text-center">
+          <div className="space-y-4">
+            <h2 className="text-5xl md:text-6xl font-bold text-white leading-tight">
+              フリマ市場で<br />
+              <span className="bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">
+                最高の利益を実現
+              </span>
+            </h2>
+            <p className="text-xl text-slate-300 max-w-2xl mx-auto">
+              リアルタイムな市場価格データと高度な分析ツールで、
+              あなたの販売戦略を最適化します。
+            </p>
+          </div>
+
+          {/* CTA Buttons */}
+          <div className="flex flex-col sm:flex-row gap-4 justify-center pt-8">
+            <a href={stripeCheckoutUrl} target="_blank" rel="noopener noreferrer">
+              <Button className="bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-semibold py-3 px-8 rounded-lg text-lg">
+                今すぐ申し込む（490円）
+              </Button>
+            </a>
+            <a href={getLoginUrl()}>
+              <Button variant="outline" className="border-slate-600 text-white hover:bg-slate-800 font-semibold py-3 px-8 rounded-lg text-lg">
+                ログイン
+              </Button>
+            </a>
+          </div>
+        </div>
       </section>
 
       {/* Features Section */}
-      <section className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
-        <h2 className="text-3xl font-bold text-center text-slate-900 dark:text-white mb-12">
-          Why Choose Our Platform?
-        </h2>
+      <section className="max-w-6xl mx-auto px-4 md:px-8 py-20">
+        <div className="text-center mb-16">
+          <h3 className="text-3xl md:text-4xl font-bold text-white mb-4">
+            強力な機能
+          </h3>
+          <p className="text-slate-400 text-lg">
+            フリマ市場での成功に必要なすべての機能を備えています
+          </p>
+        </div>
+
         <div className="grid md:grid-cols-3 gap-8">
-          <Card>
-            <CardHeader>
-              <Zap className="w-8 h-8 text-blue-600 mb-2" />
-              <CardTitle>Fast & Reliable</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p className="text-slate-600 dark:text-slate-400">
-                Lightning-fast performance with 99.9% uptime guarantee. Built on modern infrastructure.
-              </p>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardHeader>
-              <Shield className="w-8 h-8 text-green-600 mb-2" />
-              <CardTitle>Secure & Safe</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p className="text-slate-600 dark:text-slate-400">
-                Enterprise-grade security with encryption, regular backups, and compliance certifications.
-              </p>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardHeader>
-              <Crown className="w-8 h-8 text-amber-600 mb-2" />
-              <CardTitle>Pro Features</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p className="text-slate-600 dark:text-slate-400">
-                Unlock unlimited access with Pro. Priority support and advanced features included.
-              </p>
-            </CardContent>
-          </Card>
+          {features.map((feature, index) => {
+            const Icon = feature.icon;
+            return (
+              <Card key={index} className="bg-slate-800 border-slate-700 hover:border-slate-600 transition-colors">
+                <CardHeader>
+                  <div className="w-12 h-12 bg-blue-600/20 rounded-lg flex items-center justify-center mb-4">
+                    <Icon className="w-6 h-6 text-blue-400" />
+                  </div>
+                  <CardTitle className="text-white">{feature.title}</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-slate-400">{feature.description}</p>
+                </CardContent>
+              </Card>
+            );
+          })}
         </div>
       </section>
 
       {/* Pricing Section */}
-      <section className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
-        <h2 className="text-3xl font-bold text-center text-slate-900 dark:text-white mb-12">
-          Simple, Transparent Pricing
-        </h2>
-        <div className="grid md:grid-cols-2 gap-8">
+      <section className="max-w-6xl mx-auto px-4 md:px-8 py-20">
+        <div className="text-center mb-16">
+          <h3 className="text-3xl md:text-4xl font-bold text-white mb-4">
+            シンプルな価格設定
+          </h3>
+          <p className="text-slate-400 text-lg">
+            1回限りの支払いで、永遠にアクセス可能
+          </p>
+        </div>
+
+        <div className="grid md:grid-cols-2 gap-8 max-w-2xl mx-auto">
           {/* Free Plan */}
-          <Card className="border-slate-200 dark:border-slate-700">
+          <Card className="bg-slate-800 border-slate-700">
             <CardHeader>
-              <CardTitle className="text-2xl">Free</CardTitle>
-              <CardDescription>Perfect for getting started</CardDescription>
+              <CardTitle className="text-white">無料プラン</CardTitle>
+              <CardDescription>基本機能を試す</CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
               <div>
-                <p className="text-4xl font-bold text-slate-900 dark:text-white">$0</p>
-                <p className="text-slate-600 dark:text-slate-400">Forever free</p>
+                <p className="text-3xl font-bold text-white">¥0</p>
+                <p className="text-slate-400 text-sm">永遠に無料</p>
               </div>
               <ul className="space-y-3">
-                <li className="flex items-center gap-2 text-slate-700 dark:text-slate-300">
-                  <span className="w-2 h-2 bg-blue-600 rounded-full"></span>
-                  10 requests per day
+                <li className="flex items-center gap-2 text-slate-300">
+                  <Check className="w-5 h-5 text-green-400" />
+                  基本的な検索機能
                 </li>
-                <li className="flex items-center gap-2 text-slate-700 dark:text-slate-300">
-                  <span className="w-2 h-2 bg-blue-600 rounded-full"></span>
-                  Basic support
-                </li>
-                <li className="flex items-center gap-2 text-slate-700 dark:text-slate-300">
-                  <span className="w-2 h-2 bg-blue-600 rounded-full"></span>
-                  Community access
+                <li className="flex items-center gap-2 text-slate-300">
+                  <Check className="w-5 h-5 text-green-400" />
+                  最大10商品まで
                 </li>
               </ul>
-              {isAuthenticated ? (
-                <Link href="/dashboard">
-                  <Button variant="outline" className="w-full">
-                    View Dashboard
-                  </Button>
-                </Link>
-              ) : (
-                <a href={getLoginUrl()} className="block">
-                  <Button variant="outline" className="w-full">
-                    Get Started
-                  </Button>
-                </a>
-              )}
+              <a href={getLoginUrl()}>
+                <Button variant="outline" className="w-full border-slate-600 text-white hover:bg-slate-700">
+                  無料で始める
+                </Button>
+              </a>
             </CardContent>
           </Card>
 
-          {/* Pro Plan */}
-          <Card className="border-2 border-blue-600 dark:border-blue-500 relative">
-            <div className="absolute -top-3 left-1/2 transform -translate-x-1/2">
-              <span className="bg-blue-600 text-white px-4 py-1 rounded-full text-sm font-semibold">
-                Most Popular
-              </span>
+          {/* Premium Plan */}
+          <Card className="bg-gradient-to-br from-blue-900 to-slate-800 border-blue-600 relative">
+            <div className="absolute -top-3 right-6 bg-blue-600 text-white px-3 py-1 rounded-full text-sm font-semibold">
+              推奨
             </div>
             <CardHeader>
-              <CardTitle className="text-2xl">Pro</CardTitle>
-              <CardDescription>For power users</CardDescription>
+              <CardTitle className="text-white">プレミアムプラン</CardTitle>
+              <CardDescription>フル機能を利用</CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
               <div>
-                <p className="text-4xl font-bold text-slate-900 dark:text-white">$9</p>
-                <p className="text-slate-600 dark:text-slate-400">per month</p>
+                <p className="text-3xl font-bold text-white">¥490</p>
+                <p className="text-slate-300 text-sm">1回限りの支払い</p>
               </div>
               <ul className="space-y-3">
-                <li className="flex items-center gap-2 text-slate-700 dark:text-slate-300">
-                  <span className="w-2 h-2 bg-blue-600 rounded-full"></span>
-                  Unlimited requests
+                <li className="flex items-center gap-2 text-slate-200">
+                  <Check className="w-5 h-5 text-green-400" />
+                  すべての検索機能
                 </li>
-                <li className="flex items-center gap-2 text-slate-700 dark:text-slate-300">
-                  <span className="w-2 h-2 bg-blue-600 rounded-full"></span>
-                  Priority support
+                <li className="flex items-center gap-2 text-slate-200">
+                  <Check className="w-5 h-5 text-green-400" />
+                  無制限の商品管理
                 </li>
-                <li className="flex items-center gap-2 text-slate-700 dark:text-slate-300">
-                  <span className="w-2 h-2 bg-blue-600 rounded-full"></span>
-                  Advanced analytics
+                <li className="flex items-center gap-2 text-slate-200">
+                  <Check className="w-5 h-5 text-green-400" />
+                  高度な分析ツール
                 </li>
-                <li className="flex items-center gap-2 text-slate-700 dark:text-slate-300">
-                  <span className="w-2 h-2 bg-blue-600 rounded-full"></span>
-                  API access
+                <li className="flex items-center gap-2 text-slate-200">
+                  <Check className="w-5 h-5 text-green-400" />
+                  優先サポート
                 </li>
               </ul>
-              <a href="https://buy.stripe.com/test_4gM6oH6aI00a8h13G04Ni0e" target="_blank" rel="noopener noreferrer" className="block">
-                <Button className="w-full bg-blue-600 hover:bg-blue-700 text-white">
-                  {isAuthenticated ? "Upgrade Now" : "Get Started"}
+              <a href={stripeCheckoutUrl} target="_blank" rel="noopener noreferrer">
+                <Button className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold">
+                  今すぐ申し込む
                 </Button>
               </a>
             </CardContent>
@@ -193,12 +195,27 @@ export default function Home() {
         </div>
       </section>
 
+      {/* CTA Section */}
+      <section className="max-w-6xl mx-auto px-4 md:px-8 py-20">
+        <div className="bg-gradient-to-r from-blue-600 to-cyan-600 rounded-lg p-12 text-center space-y-6">
+          <h3 className="text-3xl md:text-4xl font-bold text-white">
+            今すぐ始めましょう
+          </h3>
+          <p className="text-lg text-blue-100 max-w-2xl mx-auto">
+            わずか490円で、フリマ市場での販売戦略を最適化してください。
+          </p>
+          <a href={stripeCheckoutUrl} target="_blank" rel="noopener noreferrer">
+            <Button className="bg-white text-blue-600 hover:bg-blue-50 font-semibold py-3 px-8 rounded-lg text-lg">
+              申し込む
+            </Button>
+          </a>
+        </div>
+      </section>
+
       {/* Footer */}
-      <footer className="border-t border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 mt-20">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-          <div className="text-center text-slate-600 dark:text-slate-400">
-            <p>&copy; 2026 SaaSPro. All rights reserved.</p>
-          </div>
+      <footer className="border-t border-slate-700 bg-slate-900/50 backdrop-blur-sm py-8">
+        <div className="max-w-6xl mx-auto px-4 md:px-8 text-center text-slate-400 text-sm">
+          <p>&copy; 2026 フリマ価格値付けツール. All rights reserved.</p>
         </div>
       </footer>
     </div>
