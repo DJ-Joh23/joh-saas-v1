@@ -1,77 +1,39 @@
-# Joh SaaS V1 - Project TODO
+# Joh SaaS - 販売プラットフォーム構築
 
-## Phase 2: Database Schema
-- [x] Supabase認証テーブルの設計
-- [x] ユーザープロフィールテーブルの実装
-- [x] 購読情報テーブル（subscription）の実装
-- [x] 使用回数トラッキングテーブル（usage_log）の実装
-- [x] データベーススキーマのマイグレーション
+## 方針：「お店」の外側を作る
+- ❌ アプリ機能の開発（別タスク）
+- ❌ 商品管理機能
+- ✅ ランディングページ（LP）
+- ✅ 決済システム
+- ✅ Vercel インフラ開通
 
-## Phase 3: Supabase Authentication
-- [x] Supabaseクライアントの初期化
-- [x] ログイン機能の実装
-- [x] ログアウト機能の実装
-- [x] セッション管理の実装
-- [x] 認証状態の永続化
+## Phase 1: Vercel インフラの開通（Root Directory 修正）
+- [ ] vercel.json に rootDirectory: "client" を指定
+- [ ] buildCommand を npm run build に修正
+- [ ] outputDirectory を dist に修正
+- [ ] GitHub にコミット・プッシュ
+- [ ] Vercel で再ビルド実行
+- [ ] デプロイ URL でアプリが表示されることを確認
 
-## Phase 4: Usage Limit Feature
-- [x] 使用回数のトラッキング機能
-- [x] 日次リセット機能の実装
-- [x] 制限チェック機能（無料：10回/日、有料：無制限）
-- [x] 使用回数API エンドポイント
+## Phase 2: アプリ機能の削除（Dashboard.tsx の上書き）
+- [ ] Dashboard.tsx を空のページまたはシンプルなページに置き換え
+- [ ] せどり管理機能を完全に削除
+- [ ] 商品リスト表示を削除
 
-## Phase 5: Stripe Integration
-- [x] Stripeクライアントの初期化
-- [x] チェックアウトセッション作成機能
-- [x] ウェブフック処理（支払い成功時）
-- [x] 購読ステータスの更新
-- [x] キャンセル機能
+## Phase 3: LP の作成（Home.tsx を販売ページに変更）
+- [ ] ヒーロー画像/セクション（アプリの紹介）
+- [ ] 機能説明セクション
+- [ ] 価格表示セクション（490円）
+- [ ] 「申し込む」ボタン（Stripe 決済へ）
+- [ ] シンプルで効果的なデザイン
 
-## Phase 6: Frontend UI
-- [x] ダッシュボードページの実装
-- [x] ユーザープロフィールコンポーネント
-- [x] 使用回数表示コンポーネント
-- [x] Proアップグレードボタン
-- [x] 決済画面への遷移
-- [x] 購読ステータス表示
+## Phase 4: 決済導線の確保（Stripe ボタン設置）
+- [ ] LP の「申し込む」ボタンに Stripe 決済リンクを埋め込み
+- [ ] 日本語決済画面への遷移確認
+- [ ] 決済フロー全体の動作確認
 
-## Phase 7: Testing & Bug Fixes
-- [x] 認証フローのテスト
-- [x] 使用回数制限のテスト
-- [x] Stripe決済フローのテスト
-- [x] バグ修正と最適化
-
-## Phase 8: Documentation
-- [x] 環境変数設定ガイドの作成
-- [x] README.mdの更新
-- [x] API仕様書の作成
-- [x] セットアップ手順の記載
-
-## Phase 9: GitHub Push
-- [ ] GitHubへのコードプッシュ
-- [ ] 最終確認と動作検証
-
-## Phase 10: Stripe Trial Period & Vercel Fix
-- [x] Stripe Checkout Sessionに7日間の無料トライアルを追加
-- [x] 開発サーバーの再起動
-- [x] Gitコミット（trial_period_days設定）
-- [x] チェックポイント保存
-
-## Phase 11: GitHub Push with New Token
-- [x] 新しいGitHubトークンを使用してリモートリポジトリを設定
-- [x] コードをGitHubにプッシュ
-- [x] GitHubリポジトリの確認
-
-## Phase 12: Vercel Final Deployment
-- [ ] Vercel環境変数設定の確認
-- [ ] Vercelで再ビルド（Redeploy）実行
-- [ ] デプロイ完了確認
-- [ ] 本番環境での動作確認
-
-## Phase 13: Frontend Build Fix for Vercel
-- [x] プロジェクト構造の確認（client/server分離）
-- [x] vercel.jsonの作成/修正
-- [x] ビルドコマンドの確認
-- [x] ローカルビルドテスト
-- [x] GitHubへプッシュ
-- [ ] Vercelで再デプロイ
+## Phase 5: 最終デプロイと公開
+- [ ] 全ページの動作確認
+- [ ] Vercel への最終デプロイ
+- [ ] 公開 URL の確認
+- [ ] 独自ドメイン（joh-design.com）の接続確認
