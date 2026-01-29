@@ -1,225 +1,245 @@
-import { useAuth } from "@/_core/hooks/useAuth";
+import { useState, useMemo } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { trpc } from "@/lib/trpc";
-import { Loader2, Crown, AlertCircle } from "lucide-react";
-import { useEffect } from "react";
-import { useLocation } from "wouter";
-import { toast } from "sonner";
+import { Input } from "@/components/ui/input";
+import { Search, TrendingUp, ShoppingCart } from "lucide-react";
+
+// デモ用 Nike スニーカーデータ
+const DEMO_PRODUCTS = [
+  {
+    id: 1,
+    name: "Air Jordan 1 Retro High OG",
+    sku: "AJ1-RHO-001",
+    size: "US 10",
+    image: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=200&h=200&fit=crop",
+    retailPrice: 170,
+    marketPrice: 450,
+    profit: 280,
+    profitRate: 164.7,
+  },
+  {
+    id: 2,
+    name: "Nike Dunk Low Retro",
+    sku: "DUNK-LOW-002",
+    size: "US 11",
+    image: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=200&h=200&fit=crop",
+    retailPrice: 110,
+    marketPrice: 320,
+    profit: 210,
+    profitRate: 190.9,
+  },
+  {
+    id: 3,
+    name: "Air Max 90",
+    sku: "AMAX90-003",
+    size: "US 9",
+    image: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=200&h=200&fit=crop",
+    retailPrice: 130,
+    marketPrice: 280,
+    profit: 150,
+    profitRate: 115.4,
+  },
+  {
+    id: 4,
+    name: "Jordan 11 Retro",
+    sku: "J11-RET-004",
+    size: "US 12",
+    image: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=200&h=200&fit=crop",
+    retailPrice: 220,
+    marketPrice: 680,
+    profit: 460,
+    profitRate: 209.1,
+  },
+  {
+    id: 5,
+    name: "Nike SB Dunk Low",
+    sku: "SBDUNK-005",
+    size: "US 10.5",
+    image: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=200&h=200&fit=crop",
+    retailPrice: 115,
+    marketPrice: 380,
+    profit: 265,
+    profitRate: 230.4,
+  },
+];
 
 export default function Dashboard() {
-  const { user, isAuthenticated } = useAuth();
-  const [, setLocation] = useLocation();
+  const [searchQuery, setSearchQuery] = useState("");
+  const [sortBy, setSortBy] = useState<"profit" | "profitRate">("profitRate");
 
-  const subscriptionStatus = trpc.subscription.getStatus.useQuery(undefined, {
-    enabled: isAuthenticated,
-  });
-
-  const usageStats = trpc.usage.getStats.useQuery(undefined, {
-    enabled: isAuthenticated,
-  });
-
-  const createCheckout = trpc.subscription.createCheckout.useMutation({
-    onSuccess: (data) => {
-      if (data.url) {
-        window.location.href = data.url;
-      }
-    },
-    onError: (error) => {
-      toast.error(error.message || "Failed to create checkout session");
-    },
-  });
-
-  const handleCheckoutSuccess = trpc.subscription.handleCheckoutSuccess.useMutation({
-    onSuccess: () => {
-      toast.success("Upgrade successful! You now have Pro access.");
-      subscriptionStatus.refetch();
-      usageStats.refetch();
-    },
-    onError: (error) => {
-      toast.error(error.message || "Failed to process upgrade");
-    },
-  });
-
-  useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
-    const sessionId = params.get("session_id");
-    if (sessionId && isAuthenticated) {
-      handleCheckoutSuccess.mutate({ sessionId });
-      window.history.replaceState({}, document.title, window.location.pathname);
-    }
-  }, [isAuthenticated]);
-
-  if (!isAuthenticated) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <Card className="w-full max-w-md">
-          <CardHeader>
-            <CardTitle>Access Denied</CardTitle>
-            <CardDescription>Please log in to access your dashboard</CardDescription>
-          </CardHeader>
-        </Card>
-      </div>
+  // 検索とソート処理
+  const filteredProducts = useMemo(() => {
+    let filtered = DEMO_PRODUCTS.filter(
+      (product) =>
+        product.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        product.sku.toLowerCase().includes(searchQuery.toLowerCase())
     );
-  }
 
-  const isPro = subscriptionStatus.data?.plan === "pro";
-  const usagePercentage = usageStats.data
-    ? (usageStats.data.todayUsage / usageStats.data.limit) * 100
+    // ソート処理
+    filtered.sort((a, b) => {
+      if (sortBy === "profit") {
+        return b.profit - a.profit;
+      } else {
+        return b.profitRate - a.profitRate;
+      }
+    });
+
+    return filtered;
+  }, [searchQuery, sortBy]);
+
+  const totalProfit = filteredProducts.reduce((sum, p) => sum + p.profit, 0);
+  const avgProfitRate = filteredProducts.length > 0
+    ? (filteredProducts.reduce((sum, p) => sum + p.profitRate, 0) / filteredProducts.length).toFixed(1)
     : 0;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-900 dark:to-slate-800 p-8">
-      <div className="max-w-4xl mx-auto space-y-8">
-        {/* Header */}
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 to-slate-800 p-4 md:p-8">
+      <div className="max-w-6xl mx-auto space-y-6">
+        {/* ヘッダー */}
         <div className="space-y-2">
-          <h1 className="text-4xl font-bold text-slate-900 dark:text-white">
-            Welcome, {user?.name || "User"}!
+          <h1 className="text-3xl md:text-4xl font-bold text-white">
+            Nike せどり管理ダッシュボード
           </h1>
-          <p className="text-lg text-slate-600 dark:text-slate-400">
-            Manage your account and track your usage
+          <p className="text-slate-400">
+            リセール市場の価格推移を追跡し、最高の利益機会を発見
           </p>
         </div>
 
-        {/* Plan Status Card */}
-        <Card className="border-2">
+        {/* サマリーカード */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <Card className="bg-slate-800 border-slate-700">
+            <CardHeader className="pb-3">
+              <CardTitle className="text-sm font-medium text-slate-400">
+                総利益（表示中）
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p className="text-3xl font-bold text-white">
+                ¥{totalProfit.toLocaleString()}
+              </p>
+            </CardContent>
+          </Card>
+
+          <Card className="bg-slate-800 border-slate-700">
+            <CardHeader className="pb-3">
+              <CardTitle className="text-sm font-medium text-slate-400">
+                平均利益率
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p className="text-3xl font-bold text-green-400">
+                {avgProfitRate}%
+              </p>
+            </CardContent>
+          </Card>
+
+          <Card className="bg-slate-800 border-slate-700">
+            <CardHeader className="pb-3">
+              <CardTitle className="text-sm font-medium text-slate-400">
+                商品数
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p className="text-3xl font-bold text-blue-400">
+                {filteredProducts.length}
+              </p>
+            </CardContent>
+          </Card>
+        </div>
+
+        {/* 検索・フィルター */}
+        <Card className="bg-slate-800 border-slate-700">
           <CardHeader>
-            <div className="flex items-center justify-between">
-              <div>
-                <CardTitle className="text-2xl">Your Plan</CardTitle>
-                <CardDescription>Current subscription status</CardDescription>
-              </div>
-              {isPro && (
-                <div className="flex items-center gap-2 bg-amber-100 dark:bg-amber-900 px-4 py-2 rounded-lg">
-                  <Crown className="w-5 h-5 text-amber-600 dark:text-amber-400" />
-                  <span className="font-semibold text-amber-900 dark:text-amber-100">Pro</span>
-                </div>
-              )}
-            </div>
+            <CardTitle className="text-white">検索とフィルター</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <p className="text-sm text-slate-600 dark:text-slate-400">Plan Type</p>
-                <p className="text-2xl font-bold text-slate-900 dark:text-white capitalize">
-                  {subscriptionStatus.data?.plan || "Loading..."}
-                </p>
-              </div>
-              <div>
-                <p className="text-sm text-slate-600 dark:text-slate-400">Status</p>
-                <p className="text-2xl font-bold text-green-600 dark:text-green-400 capitalize">
-                  {subscriptionStatus.data?.status || "Loading..."}
-                </p>
-              </div>
+            <div className="relative">
+              <Search className="absolute left-3 top-3 w-5 h-5 text-slate-500" />
+              <Input
+                placeholder="モデル名またはSKUで検索..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="pl-10 bg-slate-700 border-slate-600 text-white placeholder:text-slate-500"
+              />
             </div>
 
-            {!isPro && (
-              <a
-                href="https://buy.stripe.com/test_4gM6oH6aI00a8h13G04Ni0e"
-                target="_blank"
-                rel="noopener noreferrer"
+            <div className="flex gap-2">
+              <Button
+                onClick={() => setSortBy("profitRate")}
+                variant={sortBy === "profitRate" ? "default" : "outline"}
+                className={sortBy === "profitRate" ? "bg-blue-600 hover:bg-blue-700" : ""}
               >
-                <Button
-                  className="w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-semibold py-3 rounded-lg"
-                >
-                  <Crown className="w-4 h-4 mr-2" />
-                  Upgrade to Pro
-                </Button>
-              </a>
-            )}
+                <TrendingUp className="w-4 h-4 mr-2" />
+                利益率でソート
+              </Button>
+              <Button
+                onClick={() => setSortBy("profit")}
+                variant={sortBy === "profit" ? "default" : "outline"}
+                className={sortBy === "profit" ? "bg-blue-600 hover:bg-blue-700" : ""}
+              >
+                <ShoppingCart className="w-4 h-4 mr-2" />
+                利益額でソート
+              </Button>
+            </div>
           </CardContent>
         </Card>
 
-        {/* Usage Card */}
-        <Card>
+        {/* 商品リスト */}
+        <Card className="bg-slate-800 border-slate-700">
           <CardHeader>
-            <CardTitle>Daily Usage</CardTitle>
+            <CardTitle className="text-white">商品リスト</CardTitle>
             <CardDescription>
-              {isPro
-                ? "You have unlimited usage with Pro"
-                : "Free plan: 10 requests per day"}
+              {filteredProducts.length} 件の商品を表示中
             </CardDescription>
           </CardHeader>
-          <CardContent className="space-y-4">
-            {usageStats.isLoading ? (
-              <div className="flex items-center justify-center py-8">
-                <Loader2 className="w-6 h-6 animate-spin text-slate-400" />
+          <CardContent>
+            <div className="overflow-x-auto">
+              <table className="w-full text-sm">
+                <thead>
+                  <tr className="border-b border-slate-700">
+                    <th className="text-left py-3 px-4 text-slate-400 font-medium">商品名</th>
+                    <th className="text-left py-3 px-4 text-slate-400 font-medium">SKU</th>
+                    <th className="text-left py-3 px-4 text-slate-400 font-medium">サイズ</th>
+                    <th className="text-right py-3 px-4 text-slate-400 font-medium">定価</th>
+                    <th className="text-right py-3 px-4 text-slate-400 font-medium">市場価格</th>
+                    <th className="text-right py-3 px-4 text-slate-400 font-medium">利益</th>
+                    <th className="text-right py-3 px-4 text-slate-400 font-medium">利益率</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {filteredProducts.map((product) => (
+                    <tr key={product.id} className="border-b border-slate-700 hover:bg-slate-700/50">
+                      <td className="py-3 px-4 text-white font-medium">{product.name}</td>
+                      <td className="py-3 px-4 text-slate-300">{product.sku}</td>
+                      <td className="py-3 px-4 text-slate-300">{product.size}</td>
+                      <td className="py-3 px-4 text-right text-slate-300">¥{product.retailPrice.toLocaleString()}</td>
+                      <td className="py-3 px-4 text-right text-blue-400 font-semibold">
+                        ¥{product.marketPrice.toLocaleString()}
+                      </td>
+                      <td className="py-3 px-4 text-right text-green-400 font-semibold">
+                        ¥{product.profit.toLocaleString()}
+                      </td>
+                      <td className="py-3 px-4 text-right text-green-400 font-bold">
+                        {product.profitRate.toFixed(1)}%
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+
+            {filteredProducts.length === 0 && (
+              <div className="text-center py-8">
+                <p className="text-slate-400">検索条件に一致する商品がありません</p>
               </div>
-            ) : (
-              <>
-                <div className="space-y-2">
-                  <div className="flex justify-between items-center">
-                    <span className="text-sm font-medium text-slate-700 dark:text-slate-300">
-                      Usage Today
-                    </span>
-                    <span className="text-sm font-bold text-slate-900 dark:text-white">
-                      {usageStats.data?.todayUsage || 0} / {usageStats.data?.limit === Infinity ? "∞" : usageStats.data?.limit || 10}
-                    </span>
-                  </div>
-                  <div className="w-full bg-slate-200 dark:bg-slate-700 rounded-full h-3 overflow-hidden">
-                    <div
-                      className={`h-full transition-all duration-300 ${
-                        usagePercentage > 80
-                          ? "bg-red-500"
-                          : usagePercentage > 50
-                          ? "bg-yellow-500"
-                          : "bg-green-500"
-                      }`}
-                      style={{ width: `${Math.min(usagePercentage, 100)}%` }}
-                    />
-                  </div>
-                </div>
-
-                {!isPro && usageStats.data && usageStats.data.remaining <= 3 && (
-                  <div className="flex gap-3 p-3 bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-lg">
-                    <AlertCircle className="w-5 h-5 text-yellow-600 dark:text-yellow-500 flex-shrink-0 mt-0.5" />
-                    <div>
-                      <p className="font-semibold text-yellow-900 dark:text-yellow-200">
-                        Running low on requests
-                      </p>
-                      <p className="text-sm text-yellow-800 dark:text-yellow-300">
-                        You have {usageStats.data.remaining} requests left today. Upgrade to Pro for unlimited access.
-                      </p>
-                    </div>
-                  </div>
-                )}
-
-                {!isPro && usageStats.data && usageStats.data.remaining === 0 && (
-                  <div className="flex gap-3 p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg">
-                    <AlertCircle className="w-5 h-5 text-red-600 dark:text-red-500 flex-shrink-0 mt-0.5" />
-                    <div>
-                      <p className="font-semibold text-red-900 dark:text-red-200">
-                        Daily limit reached
-                      </p>
-                      <p className="text-sm text-red-800 dark:text-red-300">
-                        You have used all your daily requests. Upgrade to Pro to continue using the service.
-                      </p>
-                    </div>
-                  </div>
-                )}
-              </>
             )}
           </CardContent>
         </Card>
 
-        {/* User Info Card */}
-        <Card>
-          <CardHeader>
-            <CardTitle>Account Information</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-3">
-            <div>
-              <p className="text-sm text-slate-600 dark:text-slate-400">Email</p>
-              <p className="text-slate-900 dark:text-white font-medium">{user?.email || "N/A"}</p>
-            </div>
-            <div>
-              <p className="text-sm text-slate-600 dark:text-slate-400">Member Since</p>
-              <p className="text-slate-900 dark:text-white font-medium">
-                {user?.createdAt ? new Date(user.createdAt).toLocaleDateString() : "N/A"}
-              </p>
-            </div>
-          </CardContent>
-        </Card>
+        {/* フッター */}
+        <div className="text-center text-slate-500 text-sm">
+          <p>このダッシュボードはデモンストレーション用です。実際のデータは API から取得されます。</p>
+        </div>
       </div>
     </div>
   );
