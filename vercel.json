@@ -1,8 +1,16 @@
 {
-  "buildCommand": "pnpm build",
-  "outputDirectory": "dist/public",
+  "buildCommand": "cd client && npm run build",
+  "outputDirectory": "client/dist",
   "framework": "vite",
-  "installCommand": "pnpm install",
+  "installCommand": "npm install",
+  "env": {
+    "VITE_APP_ID": "@VITE_APP_ID",
+    "VITE_OAUTH_PORTAL_URL": "@VITE_OAUTH_PORTAL_URL",
+    "VITE_FRONTEND_FORGE_API_URL": "@VITE_FRONTEND_FORGE_API_URL",
+    "VITE_FRONTEND_FORGE_API_KEY": "@VITE_FRONTEND_FORGE_API_KEY",
+    "VITE_APP_TITLE": "@VITE_APP_TITLE",
+    "VITE_APP_LOGO": "@VITE_APP_LOGO"
+  },
   "rewrites": [
     {
       "source": "/api/:path*",

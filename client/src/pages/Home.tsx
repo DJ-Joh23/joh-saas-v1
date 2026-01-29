@@ -183,19 +183,11 @@ export default function Home() {
                   API access
                 </li>
               </ul>
-              {isAuthenticated ? (
-                <Link href="/dashboard">
-                  <Button className="w-full bg-blue-600 hover:bg-blue-700 text-white">
-                    Upgrade Now
-                  </Button>
-                </Link>
-              ) : (
-                <a href={getLoginUrl()} className="block">
-                  <Button className="w-full bg-blue-600 hover:bg-blue-700 text-white">
-                    Get Started
-                  </Button>
-                </a>
-              )}
+              <a href="https://buy.stripe.com/test_4gM6oH6aI00a8h13G04Ni0e" target="_blank" rel="noopener noreferrer" className="block">
+                <Button className="w-full bg-blue-600 hover:bg-blue-700 text-white">
+                  {isAuthenticated ? "Upgrade Now" : "Get Started"}
+                </Button>
+              </a>
             </CardContent>
           </Card>
         </div>
