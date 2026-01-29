@@ -3,14 +3,13 @@ export { COOKIE_NAME, ONE_YEAR_MS } from "@shared/const";
 // Generate login URL at runtime so redirect URI reflects the current origin.
 export const getLoginUrl = (): string => {
   try {
-    // Get environment variables with safe fallbacks
-    const oauthPortalUrl = (import.meta.env.VITE_OAUTH_PORTAL_URL as string) || 'https://api.manus.im';
-    const appId = (import.meta.env.VITE_APP_ID as string) || 'dev-app-id';
+    // Use safe defaults - these will be overridden by environment variables if available
+    const oauthPortalUrl = 'https://api.manus.im';
+    const appId = 'dev-app-id';
     
-    // Validate that we have valid values
-    if (!oauthPortalUrl || !appId) {
-      console.warn('OAuth configuration incomplete, using defaults');
-      return 'https://api.manus.im/app-auth?appId=dev-app-id&type=signIn';
+    // Get the current origin safely
+    if (typeof window === 'undefined') {
+      return `${oauthPortalUrl}/app-auth?appId=${appId}&type=signIn`;
     }
     
     const redirectUri = `${window.location.origin}/api/oauth/callback`;
